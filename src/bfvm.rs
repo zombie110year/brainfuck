@@ -47,10 +47,8 @@ impl BFVM {
             self.codep += 1;
         }
     }
-}
 
-// 各操作的实现
-impl BFVM {
+    /// 在运行前执行, 构建 `[]` 跳转坐标
     fn scan_jump(&mut self, code: &Vec<char>) {
         let mut stack = Vec::new();
         for (i, c) in code.iter().enumerate() {
@@ -75,7 +73,10 @@ impl BFVM {
             panic!("存在未闭合的跳转指令 '['");
         }
     }
+}
 
+/// 各操作的实现
+impl BFVM {
     fn op_right(&mut self) {
         self.p += 1;
         // 由于 index 和 length 相差 1，因此这里在相等时就需要增长一位
@@ -105,7 +106,7 @@ impl BFVM {
             .unwrap();
     }
 
-    // 需要一次性输入所有，否则会把回车换行也读进去
+    /// 需要一次性输入所有，否则会把回车换行也读进去
     fn op_in(&mut self) {
         let mut buf = &mut self.mem[self.p..self.p + 1];
         std::io::stdin().lock().read(&mut buf).unwrap();
