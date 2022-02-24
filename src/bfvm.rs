@@ -1,6 +1,6 @@
 //! BrainFuck Virtual Machine
 
-use std::io::Write;
+use std::io::{Read, Write};
 
 /// # BrainFuck Virtual Machine
 #[derive(Debug)]
@@ -65,8 +65,10 @@ impl BFVM {
             .unwrap();
     }
 
-    fn op_in(&self) {
-        todo!()
+    // 需要一次性输入所有，否则会把回车换行也读进去
+    fn op_in(&mut self) {
+        let mut buf = &mut self.mem[self.p..self.p + 1];
+        std::io::stdin().lock().read(&mut buf).unwrap();
     }
 
     fn op_jump(&self) {
