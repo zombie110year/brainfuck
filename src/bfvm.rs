@@ -1,5 +1,7 @@
 //! BrainFuck Virtual Machine
 
+use std::io::Write;
+
 /// # BrainFuck Virtual Machine
 #[derive(Debug)]
 pub struct BFVM {
@@ -33,7 +35,7 @@ impl BFVM {
 }
 
 // 各操作的实现
-impl BFVM{
+impl BFVM {
     fn op_right(&mut self) {
         self.p += 1;
         // 由于 index 和 length 相差 1，因此这里在相等时就需要增长一位
@@ -55,7 +57,12 @@ impl BFVM{
     }
 
     fn op_out(&self) {
-        todo!()
+        let c = self.mem[self.p];
+        std::io::stdout()
+            .lock()
+            .write(&[c])
+            .and_then(|_| std::io::stdout().lock().flush())
+            .unwrap();
     }
 
     fn op_in(&self) {
